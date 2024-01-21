@@ -31,6 +31,14 @@ function App() {
       return;
     }
 
+    // Check for special characters in name and surname
+    const specialCharCheck = /[!@#$%^&*(),.?":{}|<>]/;
+
+    if (specialCharCheck.test(name) || specialCharCheck.test(surname)) {
+      alert("Name and surname should not contain special characters.");
+      return;
+    }
+
     const formattedDate = formatDateToDBFormat(date);
     const details = { name, surname, id, date: formattedDate };
 
@@ -70,7 +78,7 @@ function App() {
 
   const formatDateToDBFormat = (dateString) => {
     const [day, month, year] = dateString.split("/");
-    return `${day}-${month}-${year}`;
+    return `${day}/${month}/${year}`;
   };
 
   const handleDateChange = (e) => {
@@ -86,8 +94,8 @@ function App() {
   };
 
   return (
-    <div className="input-container">
-      <div className="input-section">
+    <div className={classes.inputContainer}>
+      <div className={classes.inputSection}>
         <h1>Please enter your details</h1>
         <form onSubmit={handleSubmit}>
           <input
@@ -95,12 +103,18 @@ function App() {
             placeholder="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            pattern="[A-Za-z]+"
+            title="Name should contain only letters"
+            required
           />
           <input
             type="text"
             placeholder="Surname"
             value={surname}
             onChange={(e) => setSurname(e.target.value)}
+            pattern="[A-Za-z]+"
+            title="Surname should contain only letters"
+            required
           />
           <input
             type="text"
@@ -115,8 +129,14 @@ function App() {
             value={date}
             onChange={handleDateChange}
           />
-          <button type="submit">POST</button>
-          <button type="button" onClick={handleCancel}>
+          <button className={classes.glowOnHover} type="submit">
+            POST
+          </button>
+          <button
+            className={classes.glowOnHover}
+            type="button"
+            onClick={handleCancel}
+          >
             CANCEL
           </button>
         </form>
